@@ -20,6 +20,7 @@
 #include <optional>
 #include <vector>
 #include <set>
+#include <regex>
 
 constexpr auto ZEEK_ARCHIVER_VERSION = "v0.6.2";
 
@@ -376,6 +377,12 @@ static void parse_options(int argc, char** argv)
 		usage_error("no <dst_dir> provided");
 	}
 
+static std::string shell_quote(const std::string& s)
+	{
+	static const std::regex single_quote("'");
+	return "'" + std::regex_replace(s, single_quote, "'\"'\"'") + "'";
+	}
+
 static bool make_dir(const char* dir)
 	{
 	if ( mkdir(dir, 0700) == 0 )
@@ -568,8 +575,8 @@ static int archive_logs()
 			debug("Archive via compression: %s -> %s", src_file.data(), dst_file.data());
 
 			std::string cmd = options.compress_cmd;
-			cmd += "<"; cmd += src_file.data();
-			cmd += ">"; cmd += tmp_file.data();
+			cmd += "<"; cmd += shell_quote(src_file);
+			cmd += ">"; cmd += shell_quote(tmp_file);
 
 			auto res = system(cmd.data());
 
