@@ -1,5 +1,10 @@
 # zeek-archiver
 
+> **NOTE**
+>
+> This repository is archived and no longer maintained. zeek-archiver has
+> moved into the [zeek-aux](https://github.com/zeek/zeek-aux) repository.
+
 A Zeek log archival service.
 
 This tool is derived from
